@@ -1,0 +1,29 @@
+{% extends 'admin/admin_welcome.html' %}
+{% if request.session.admin_session %}
+{% block hotel %}
+<style>
+    .title{
+        font-size: 25px;
+        color: #112d4e;
+    }
+</style>
+    {% for x in messages %}
+    <h3>{{ x }}</h3>
+    {% endfor %}
+
+<form action="{% url 'save_room_images' %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<table class="table">
+    <tr>
+        <th class="title" colspan="2">Add new Images</th>
+    </tr>
+    <tr>
+        <td>{{ form }}</td>
+    </tr>
+</table>
+<button type="submit" class="btn btn-success">Submit</button>
+</form>
+{% endblock %}
+{% else %}
+<h3>Please login..</h3>
+{% endif %}

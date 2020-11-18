@@ -1,0 +1,78 @@
+body{
+    font-family: 'Rubik', sans-serif;
+      color: #dbe2ef;
+  }
+  .title{
+      font-family: 'Sansita Swashed', cursive;
+      color: #dbe2ef;
+      font-size: 3em;
+      padding: 15px 100px;
+  }
+  .nav1{
+      color: #112d4e;
+      background: #dbe2ef;
+      font-weight: bolder;
+  }
+  .nav1 .navbar-brand{
+      font-size: 1.5em;
+      font-weight: normal;
+      font-family: 'Sansita Swashed', cursive;
+      background: #112d4e;
+      color: #dbe2ef;
+      padding: 5px 10px;
+  }
+  .form-inline input,label{
+      padding: 0px 5px;
+  }
+  .a1{
+    font-family: 'Rubik', sans-serif;
+    width: 200px;
+    font-size: 30px;
+    height: 50px;
+    background-color: #dbe2ef;
+    color:#112d4e ;
+    padding-bottom: 15px;
+    margin-right: 20px;
+  }
+  .a1:hover{
+    background-color:#112d4e ;
+    color: #dbe2ef;
+  }
+  #hotelpics{
+    margin: 5% 5%;
+    background-color:#112d4e;
+    color: #dbe2ef;
+  }
+  .card{
+    margin: 20px 50px 50px;
+    background-color: #dbe2ef;
+    color:#112d4e ;
+    width: 200px;
+    text-align: center;
+  }
+/* for search room */
+.con1{
+    margin: 1.5% 2%;
+    background-color: #112d4e;
+}
+.tab1 .tab3{
+    background-color: #dbe2ef;
+    color:#112d4e ;
+}
+
+.tab3{
+    margin-top: 15px;
+}
+
+.title2{
+    text-align: center;
+    font-weight: bolder;
+}
+
+.b1{
+    margin-top: 20px;
+}
+.b{
+    color: greenyellow;
+    margin-right: 50px;
+}

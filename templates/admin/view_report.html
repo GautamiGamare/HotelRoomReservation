@@ -1,0 +1,107 @@
+{% extends 'admin/admin_welcome.html' %}
+{% if request.session.admin_session %}
+{% block hotel %}
+<style>
+    .title{
+        font-size: 25px;
+        color: #112d4e;
+    }
+    .nav-item{
+        margin: 5px;
+    }
+    .nav1{
+        width: 100%;
+    }
+    .nav1 .navbar-nav{
+        margin: 0px 20px;
+    }
+    
+</style>
+    {% for x in messages %}
+    <h3>{{ x }}</h3>
+    {% endfor %}
+
+<div class="container">
+    <nav class="navbar nav1 navbar-nav-ex">
+        <ul class="navbar-nav mr-auto">
+        <form class="form-inline" action="{% url 'filter_rooms' %}" method="POST">
+          {% csrf_token %}
+        <li class="nav-item">
+        <label for="chin">Enter Check-In date</label>
+        <input class="form-control date1" type="date" id="chin" name="cin">
+        </li>
+        <li class="nav-item">
+        <label for="chout">Enter Check-out date</label>
+        <input class="form-control date1" type="date" id="chout" name="cout">
+        </li>
+        <li class="nav-item">
+        <label for="type">Select Room Type</label>
+            <select class="form-control" id="type" name="ty">
+                {% for x in room1 %}
+                <option>{{ x.type }}</option>
+                {% endfor %}
+            </select>
+        </li>
+        <li class="nav-item">
+            <label for="name">Visiter Name</label>
+            <input type="text" name="uname" class="form-control" id="name">
+        </li>
+        <li class="nav-item">
+        <button class="btn btn-success btn2 btn-lg" type="submit">Check</button>
+        </li>
+    </form>
+    </ul>
+    </nav>
+</div>
+
+<div class="container-fluid">
+    <table class="table">
+        <tr><th colspan="7" style="color: #112d4e;">Booking Details</th></tr>
+<tr>
+    {% if booking %}
+    <th>Booking ID</th>
+    <th>Checked In Date</th>
+    <th>Checked Out Date</th>
+    <th>Total Rooms</th>
+    <th>Room Catagory</th>
+    <th>Status</th>
+    <th>User ID</th>
+</tr>
+{% for x in booking %}
+    <tr>
+        <td>{{ x.id }}</td>
+        <td>{{ x.checkin_date }}</td>
+        <td>{{ x.checkout_date }}</td>
+        <td>{{ x.total }}</td>
+        <td>{{ x.type }}</td>
+        <td>{{ x.status }}</td>
+        <td>{{ x.user }}</td>
+    {% endfor %}
+{% endif %}
+
+    </table>
+    <table class="table">
+        <tr><th colspan="4" style="color:#112d4e ;">User Details</th></tr>
+<tr>
+    {% if user %}
+    <th>User ID</th>
+    <th>User Name</th>
+    <th>Contact Number</th>
+    <th>Email</th>
+</tr>
+    {% for y in user %}
+    <tr>
+                <td>{{ y.id }}</td>
+                <td>{{ y.name }}</td>
+                <td>{{ y.contact_number }}</td>
+                <td>{{ y.email }}</td>
+        </tr>
+        {% endfor %}
+    {% endif %}
+</table>
+</div>
+
+{% endblock %}
+{% else %}
+<h3>Please login..</h3>
+{% endif %}
