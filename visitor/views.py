@@ -78,11 +78,9 @@ def check_availability(request):
     room = roomType.objects.get(type=rtype)
     fac = facility(request, rtype)
     if(len(qs) >= int(rooms)):
-        status="Confirm"
         bs = bookedRooms.objects.filter(roomId__type__type= rtype)
         if(bs):
             alist = avail_list(request, rtype, cin, cout)
-            print(len(alist))
             if(len(alist)>= int(rooms)):
                 messages.success(request, "rooms are available")
                 return render(request, "visitor/check_room.html",
@@ -148,18 +146,15 @@ def confirm_booking(request):
 
 def avail_list(request,ty,chin,chout):
     bs = bookedRooms.objects.filter(roomId__type__type=ty)
+    hs = hotelRooms.objects.filter(type__type=ty)
     avail_list = []
     rlist = []
     clist = []
     if (bs):
-        hs = hotelRooms.objects.filter(type__type=ty)
         for x in bs:
             for y in hs:
-                if y.id not in rlist:
-                    rlist.append(y.id)
                 hotel_room = int(y.id)
                 booked_room = int(x.roomId_id)
-
                 if (hotel_room == booked_room):
                     iin = datetime.datetime.combine(
                         datetime.date(x.checkin_date.year, x.checkin_date.month, x.checkin_date.day),
@@ -170,16 +165,16 @@ def avail_list(request,ty,chin,chout):
 
                     if (iin > chout or out < chin):
                         pass
-
                     else:
                         if y.id not in clist:
                             clist.append(y.id)
-            print(clist)
-            print(rlist)
-            for s in rlist:
-                if s not in clist:
-                    avail_list.append(s)
-            return avail_list
+
+                if y.id not in rlist:
+                    rlist.append(y.id)
+        for s in rlist:
+            if s not in clist:
+                avail_list.append(s)
+        return avail_list
     else:
         hs = hotelRooms.objects.filter(type__type=ty)
         for y in hs:
@@ -191,9 +186,7 @@ def cancel_booking(request):
     ses = request.session['user_session']
     us = user.objects.get(id=ses)
     ps = bookedRooms.objects.get(id=request.POST.get('cid'))
-    print(ps.roomId_id)
     hs = hotelRooms.objects.get(id=ps.roomId_id)
-    print(hs.type)
     room = roomType.objects.get(type=hs.type)
     return render(request,"visitor/cancel.html",{'user':us,'booking':ps,'hotel':hs,'room':room})
 
