@@ -40,10 +40,19 @@
   <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img class="d-block w-100" src="https://www.hotelmarineplaza.com/images/marine/slider-demo.jpg" alt="Second slide" alt="First slide" height="550px">
+      <img class="d-block w-100" src="https://cf.bstatic.com/images/hotel/max1024x768/211/211874461.jpg" height="550px">
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" src="https://www.hotelmarineplaza.com/images/main-slider/slide-1.jpg" height="550px">
+      <img class="d-block w-100" src="https://cjgtravel.com/wp-content/uploads/2018/06/hotels-candidasa.jpg" alt="Second slide" alt="First slide" height="550px">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="https://www.oyster.com/uploads/sites/35/2019/06/lobby-v18639635-1440-1024x683.jpg" alt="Third slide" height="550px">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="https://static.asiawebdirect.com/m/bangkok/portals/huahin-bangkok-com/homepage/top10-hotels/allParagraphs/01/top10Set/017/image/Intercontinental-Hua-Hin-Resort.jpg" alt="Third slide" height="550px">
+    </div>
+      <div class="carousel-item">
+      <img class="d-block w-100" src="https://pix10.agoda.net/hotelImages/5491332/-1/30cc45d26999d519dc23c6ff98aa9683.jpg?s=1024x768" alt="Third slide" height="550px">
     </div>
     <div class="carousel-item">
       <img class="d-block w-100" src="https://www.hotelmarineplaza.com/images/main-slider/slide-4.jpg" alt="Third slide" height="550px">
@@ -71,7 +80,11 @@
         <h2 class="card-title">{{ x.type }} Room</h2>
       </div>
       <div class="card-footer">
-       <a href="{% url 'check_room_availb' %}?room_type={{ x.type }}" class="btn btn-success">Check Room</a>
+          <form action="{% url 'check_room_availb' %}" method="post">
+              {% csrf_token %}
+              <input type="number" name="roomtype" value="{{ x.id }}" hidden>
+              <button type="submit" class="btn btn-success">Check Room</button>
+          </form>
       </div>
     </div>
     {% endfor %}

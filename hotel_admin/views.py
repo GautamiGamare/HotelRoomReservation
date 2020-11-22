@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect,HttpResponse
 from hotel_admin.adminform import *
 from django.contrib import messages
+from visitor.models import bookedRooms,user
+from hotel_admin.models import *
 
 def admin_login(request):
     return render(request,"admin/login.html")
@@ -69,76 +71,97 @@ def save_room_images(request):
     else:
         return render(request, "admin/add_images.html", {'form': ps, 'ad': admin_session(request)})
 
+def change_capacity(request):
+    rooms = roomType.objects.all()
+    return render(request, "admin/change_capacity.html", {'rooms': rooms, 'ad': admin_session(request)})
 
-def view_report(request):
-    br = bookedRooms.objects.all()
-    users = user.objects.all()
-    return render(request, "admin/view_report.html", {'booking': br, 'user': users,
-                                                      'ad': admin_session(request), 'room1': hotelRooms.objects.all()})
+def save_capacity_room(request):
+    d1 = request.POST.get('rm')
+    d2 = request.POST.get('cp')
+    d3 = request.POST.get('beds')
+    data = roomType.objects.get(id=d1)
+    data.capacity=d2
+    data.beds = d3
+    data.save()
+    messages.success(request,"Capacity is updated")
+    return redirect("change_capacity")
 
+def bychin(request):
+    return render(request,"admin/filterby_chin_date.html",{ 'ad': admin_session(request)})
 
-def filter_rooms(request):
-    cin = request.POST.get('cin')
-    cout = request.POST.get('cout')
-    ty = request.POST.get('ty')
-    nm = request.POST.get('uname')
-    if (cin and cout and ty and nm):
-        user1 = user.objects.filter(name=nm)
-        for y in user1:
-            b1 = bookedRooms.objects.filter(checkin_date__gte=cin, checkout_date__lte=cout, type=ty, user=y.id)
-            if (b1):
-                return render(request, "admin/filter_rooms.html",
-                              {'booking': b1, 'user': user1, 'ad': admin_session(request),
-                               'room1': hotelRooms.objects.all()})
-        else:
-            messages.success(request, "No Records")
-            return render(request, "admin/filter_rooms.html",
-                          {'ad': admin_session(request), 'room1': hotelRooms.objects.all()})
-    elif (cin and cout and ty):
-        b1 = bookedRooms.objects.filter(checkin_date__gte=cin, checkout_date__lte=cout, type=ty)
-        if (b1):
-            for x in b1:
-                user1 = user.objects.filter(id=x.user)
-                return render(request, "admin/filter_rooms.html",
-                              {'booking': b1, 'user': user1, 'ad': admin_session(request),
-                               'room1': hotelRooms.objects.all()})
-        else:
-            messages.success(request, "No Records")
-            return render(request, "admin/filter_rooms.html",
-                          {'ad': admin_session(request), 'room1': hotelRooms.objects.all()})
-    elif (ty and nm):
-        user1 = user.objects.filter(name=nm)
-        if (user1):
-            for x in user1:
-                b1 = bookedRooms.objects.filter(user=x.id, type=ty)
-                if (b1):
-                    for y in b1:
-                        return render(request, "admin/filter_rooms.html",
-                                      {'booking': y, 'user': user1, 'ad': admin_session(request),
-                                       'room1': hotelRooms.objects.all()})
-                else:
-                    messages.success(request, "No Records")
-                    return render(request, "admin/filter_rooms.html",
-                                  {'ad': admin_session(request), 'room1': hotelRooms.objects.all()})
-        else:
-            messages.success(request, "No Records")
-            return render(request, "admin/filter_rooms.html",
-                          {'ad': admin_session(request), 'room1': hotelRooms.objects.all()})
-    elif (ty):
-        b1 = bookedRooms.objects.filter(type=ty)
-        if (b1):
-            for x in b1:
-                user1 = user.objects.filter(id=x.user)
-                return render(request, "admin/filter_rooms.html",
-                              {'booking': b1, 'ad': admin_session(request),
-                               'room1': hotelRooms.objects.all(), 'user': user1, })
-        else:
-            messages.success(request, "No Records")
-            return render(request, "admin/filter_rooms.html",
-                          {'ad': admin_session(request), 'room1': hotelRooms.objects.all()})
+def checkByChin(request):
+    d1 = request.POST.get('chin')
+    d2 = bookedRooms.objects.filter(checkin_date=d1)
+    us = user.objects.all()
+    rm = hotelRooms.objects.all()
+    if d2:
+        return render(request, "admin/filterby_chin_date.html", {'brooms':d2,'user':us,'room':rm,'ad': admin_session(request)})
     else:
-        return HttpResponse("Please Give Proper Input")
+        messages.success(request, "Sorry ..No Records")
+        return redirect("bychin")
 
+def fromchin(request):
+    return render(request, "admin/filterfrom_chin_date.html", {'ad': admin_session(request)})
+
+def checkfromchin(request):
+    d1 = request.POST.get('chin')
+    d2 = bookedRooms.objects.filter(checkin_date__gte=d1)
+    us = user.objects.all()
+    rm = hotelRooms.objects.all()
+    if d2:
+        return render(request, "admin/filterfrom_chin_date.html",
+                  {'brooms': d2, 'user': us, 'room': rm, 'ad': admin_session(request)})
+    else:
+        messages.success(request, "Sorry ..No Records")
+        return redirect("fromchin")
+
+def fromandto(request):
+    return render(request, "admin/filterfromandto.html", {'ad': admin_session(request)})
+
+def checkfromandto(request):
+    d1 = request.POST.get('chin')
+    d2 = request.POST.get('chout')
+    d3 = bookedRooms.objects.filter(checkin_date__gte=d1, checkout_date__lte=d2)
+    us = user.objects.all()
+    rm = hotelRooms.objects.all()
+    if d3:
+        return render(request, "admin/filterfromandto.html",
+                  {'brooms': d3, 'user': us, 'room': rm, 'ad': admin_session(request)})
+    else:
+        messages.success(request, "Sorry ..No Records")
+        return redirect("fromandto")
+
+def byusername(request):
+    return render(request, "admin/byuname.html", {'ad': admin_session(request)})
+
+def checkbyusername(request):
+    d1 = request.POST.get('nm')
+    us = user.objects.filter(name=d1)
+    d2 = bookedRooms.objects.filter(user__name=d1)
+    rm = hotelRooms.objects.all()
+    if d2:
+        return render(request, "admin/byuname.html",
+                  {'brooms': d2, 'user': us, 'room': rm, 'ad': admin_session(request)})
+    else:
+        messages.success(request,"Sorry ..No Records, Please provide proper username")
+        return redirect("byusername")
+
+def byroom(request):
+    rooms = roomType.objects.all()
+    return render(request, "admin/byroom.html", {'rooms':rooms,'ad': admin_session(request)})
+
+def checkbyroom(request):
+    d1 = request.POST.get('nm')
+    us = user.objects.all()
+    rooms = roomType.objects.all()
+    rm = hotelRooms.objects.filter(type__id=d1)
+    d2 = bookedRooms.objects.filter(roomId__type__id=d1)
+    if d2:
+        return render(request, "admin/byroom.html",
+                      {'rooms':rooms,'brooms': d2, 'user': us, 'room': rm, 'ad': admin_session(request)})
+    else:
+        messages.success(request, "Sorry ..No Records")
+        return redirect("byroom")
 
 def admin_logout(request):
     del request.session['admin_session']

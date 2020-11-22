@@ -38,10 +38,29 @@
             <li>
               <a href="{% url 'add_images' %}">Add New Images</a>
             </li>
-	          <li>
-              <a href="{% url 'view_report' %}">View All Bookings and Reports</a>
-	          </li>
-            
+            <li>
+              <a href="{% url 'change_capacity' %}">Change Capacity</a>
+            </li>
+             <li>
+              <a href="#page" data-toggle="collapse" class="dropdown-toggle">View Reports</a>
+              <ul class="collapse list-unstyled" id="page">
+                <li>
+                    <a href="{% url 'fromandto' %}">From and To Date</a>
+                </li>
+                <li>
+                    <a href="{% url 'fromchin' %}">From checked-In Date</a>
+                </li>
+                <li>
+                    <a href="{% url 'bychin' %}">Check for one checked in date</a>
+                </li>
+                <li>
+                    <a href="{% url 'byusername' %}">Check by Entering Username</a>
+                </li>
+                <li>
+                    <a href="{% url 'byroom' %}">Check by Entering Room Type</a>
+                </li>
+              </ul>
+             </li>
 	        </ul>
 
 	      </div>

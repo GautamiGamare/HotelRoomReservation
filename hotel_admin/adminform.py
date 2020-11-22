@@ -32,16 +32,6 @@ class hotelRoomForm(forms.ModelForm):
         fields = '__all__'
         model = hotelRooms
 
-
-# class roomCapacityForm(forms.ModelForm):
-#     class Meta:
-#         fields = '__all__'
-#         model = roomCapacity
-#         q = hotelRooms.objects.all()
-#     checkin_date = forms.DateField(widget=forms.DateInput(attrs={'type':'date'}))
-#     checkout_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-#     type = forms.ChoiceField(choices=[(choice.id,choice.type) for choice in hotelRooms.objects.all()])
-
 class roomImagesForm(forms.ModelForm):
     class Meta:
         fields = '__all__'

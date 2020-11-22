@@ -13,15 +13,44 @@
 
 <form action="{% url 'save_capacity_room' %}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
-<table class="table">
+<div class="container">
+    <table class="table">
     <tr>
-        <th class="title" colspan="2">Change Capacity of room types</th>
+        <th>
+            <label for="d1" id="l1">Select Room Type</label>
+        </th>
+        <th>
+            <select id="d1" class="form-control" name="rm">
+                    {% for x in rooms %}
+                    <option value="{{ x.id }}">{{ x.type }}</option>
+                    {% endfor %}
+            </select>
+        </th>
     </tr>
     <tr>
-        <td>{{ form }}</td>
+        <th>
+            <label for="d2" id="l2">Enter Capacity</label>
+        </th>
+        <th>
+            <input type="text" class="form-control" name="cp">
+        </th>
     </tr>
-</table>
-<button type="submit" class="btn btn-success">Submit</button>
+    <tr>
+        <th>
+            <label for="d2" id="l2">Enter Beds</label>
+        </th>
+        <th>
+            <input type="text" class="form-control" name="beds">
+        </th>
+    </tr>
+    <tr>
+        <th colspan="2">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </th>
+    </tr>
+    </table>
+</div>
+
 </form>
 {% endblock %}
 {% else %}

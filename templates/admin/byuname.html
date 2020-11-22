@@ -1,0 +1,72 @@
+{% extends 'admin/admin_welcome.html' %}
+{% if request.session.admin_session %}
+{% block hotel %}
+<style>
+    .title{
+        font-size: 25px;
+        color: #112d4e;
+    }
+    #l1{
+        font-size: 20px;
+        font-weight: bold;
+        color: #808080;
+    }
+    h3{
+        font-weight: bold;
+        color: #808080;
+    }
+</style>
+
+<form action="{% url 'checkbyusername' %}" method="post">
+{% csrf_token %}
+<div class="container">
+    <table class="table">
+        <div class="row">
+            <div class="col">
+                <label for="d1" id="l1">Enter Guest Name</label>
+            </div>
+            <div class="col">
+                <input type="text" id="d1" class="form-control" name="nm">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </div>
+    </table>
+</div>
+</form>
+{% for x in messages %}
+    <h3>{{ x }}</h3>
+{% endfor %}
+
+{% if brooms %}
+<div class="container">
+<table class="table">
+    <tr>
+        <th>Booking ID</th>
+        <th>Room Type</th>
+        <th>Guest Name</th>
+        <th>CheckedIn date</th>
+        <th>CheckedOut date</th>
+    </tr>
+    {% for x in brooms %}
+    <tr>
+        <td>{{ x.id }}</td>
+        {% for y in room %}
+            {% if x.roomId_id == y.id %}
+                <td>{{ y.type }}</td>
+            {% endif %}
+        {% endfor %}
+        <td>{{ x.user.name }}</td>
+        <td>{{ x.checkin_date }}</td>
+        <td>{{ x.checkout_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+{% endif %}
+
+{% endblock %}
+{% else %}
+<h3>Please login..</h3>
+{% endif %}

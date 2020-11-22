@@ -41,7 +41,7 @@ def save_user_details(request):
     return redirect(login)
 
 def facility(request,room_type):
-    room = roomType.objects.get(type=room_type)
+    room = roomType.objects.get(id=room_type)
     def facility():
         f = room.facility
         ch = ["'", "[", "]"]
@@ -51,11 +51,14 @@ def facility(request,room_type):
     return fac
 
 def check_room_availb(request):
-    type = request.GET.get('room_type')
-    room = roomType.objects.get(type=type)
-    fac = facility(request,type)
+    rtype = request.POST.get('roomtype')
+    room = roomType.objects.get(id=rtype)
+    rs = roomImages.objects.filter(type=room.id)
+    for x in rs:
+        print(x.images)
+    fac = facility(request,rtype)
     return render(request,"visitor/check_room.html",
-                  {'images':roomImages.objects.filter(id=room.id),
+                  {'images':roomImages.objects.filter(type=room.id),
                            'img1':room.images,'facility': fac,'cap':room.capacity,'room':room})
 
 def welcome_user(request):
@@ -145,7 +148,7 @@ def confirm_booking(request):
                'user': us,'type':hotelRooms.objects.all()})
 
 def avail_list(request,ty,chin,chout):
-    bs = bookedRooms.objects.filter(roomId__type__type=ty)
+    bs = bookedRooms.objects.filter(roomId__type__type=ty,status="Confirm")
     hs = hotelRooms.objects.filter(type__type=ty)
     avail_list = []
     rlist = []
@@ -192,7 +195,9 @@ def cancel_booking(request):
 
 def cancelB(request):
     id = request.POST.get('bid')
-    bookedRooms.objects.get(id=id).delete()
+    bs = bookedRooms.objects.get(id=id)
+    bs.status = "Cancel"
+    bs.save()
     return redirect('welcome_user')
 
 def user_logout(request):
