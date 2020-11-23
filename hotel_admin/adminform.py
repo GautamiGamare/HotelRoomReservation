@@ -31,7 +31,9 @@ class hotelRoomForm(forms.ModelForm):
     class Meta:
         fields = '__all__'
         model = hotelRooms
-
+        widgets = {
+            'id': forms.TextInput(attrs={'id': 'hid'})
+        }
 class roomImagesForm(forms.ModelForm):
     class Meta:
         fields = '__all__'

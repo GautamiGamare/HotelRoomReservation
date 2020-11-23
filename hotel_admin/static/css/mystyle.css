@@ -2,11 +2,25 @@ body{
     font-family: 'Rubik', sans-serif;
       color: #dbe2ef;
   }
+
+.imgs{
+    width: 400px;
+    height: 300px;
+}
+.imgs:hover{
+    width: 550px;
+    height: 400px;
+}
   .title{
       font-family: 'Sansita Swashed', cursive;
       color: #dbe2ef;
       font-size: 3em;
       padding: 15px 100px;
+  }
+  #brnd1{
+      font-size: 1.1em;
+      color: #112d4e;
+      font-family: 'Sansita Swashed', cursive;
   }
   .nav1{
       color: #112d4e;
@@ -14,15 +28,23 @@ body{
       font-weight: bolder;
   }
   .nav1 .navbar-brand{
-      font-size: 1.5em;
       font-weight: normal;
-      font-family: 'Sansita Swashed', cursive;
-      background: #112d4e;
       color: #dbe2ef;
-      padding: 5px 10px;
+      font-family: 'Sansita Swashed';
   }
+  .nav2 {
+      font-family: 'Sansita Swashed', cursive;
+      font-size: 3em;
+      padding: 15px 100px;
+      color: #112d4e;
+      background: #dbe2ef;
+  }
+
   .form-inline input,label{
       padding: 0px 5px;
+  }
+  .nav2{
+
   }
   .a1{
     font-family: 'Rubik', sans-serif;
@@ -52,16 +74,20 @@ body{
   }
 /* for search room */
 .con1{
-    margin: 1.5% 2%;
+    max-height: 1000px;
+    margin: 5px;
+    padding: 50px;
     background-color: #112d4e;
+    height: 500px;
 }
-.tab1 .tab3{
+.tab1,.tab3{
     background-color: #dbe2ef;
     color:#112d4e ;
 }
 
-.tab3{
-    margin-top: 15px;
+.tab1,.tab3{
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .title2{
@@ -71,8 +97,4 @@ body{
 
 .b1{
     margin-top: 20px;
-}
-.b{
-    color: greenyellow;
-    margin-right: 50px;
 }

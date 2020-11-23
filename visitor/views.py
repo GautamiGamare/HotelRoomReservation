@@ -5,10 +5,8 @@ from django.contrib import messages
 from visitor.models import user,bookedRooms
 import datetime
 
-
 def show_main(request):
-    room1 = roomType.objects.all()
-    return render(request,"visitor/index.html",{'room1':room1})
+    return render(request,"visitor/index.html",{'room1':roomType.objects.all()})
 
 def login(request):
     return render(request, "visitor/login.html")
@@ -22,7 +20,8 @@ def validate_user(request):
         request.session['user_session'] = qs.id
         ses = request.session['user_session']
         return render(request, "visitor/welcome_user.html",
-                      {'ses': ses, 'roomd': bookedRooms.objects.filter(user=ses).order_by('-checkin_date'), 'user': user.objects.get(id=ses)})
+                      {'ses': ses, 'roomd': bookedRooms.objects.filter(user=ses).order_by('-checkin_date'), 'user': user.objects.get(id=ses),
+                       'type': hotelRooms.objects.all()})
     except user.DoesNotExist:
         messages.success(request, "Username or passoword is incorrect")
         return redirect(login)
@@ -54,8 +53,6 @@ def check_room_availb(request):
     rtype = request.POST.get('roomtype')
     room = roomType.objects.get(id=rtype)
     rs = roomImages.objects.filter(type=room.id)
-    for x in rs:
-        print(x.images)
     fac = facility(request,rtype)
     return render(request,"visitor/check_room.html",
                   {'images':roomImages.objects.filter(type=room.id),
@@ -79,13 +76,13 @@ def check_availability(request):
     rooms = request.POST.get('total_rooms')
     qs = hotelRooms.objects.filter(type__type=rtype)
     room = roomType.objects.get(type=rtype)
-    fac = facility(request, rtype)
+    fac = facility(request, room.id)
     if(len(qs) >= int(rooms)):
         bs = bookedRooms.objects.filter(roomId__type__type= rtype)
         if(bs):
             alist = avail_list(request, rtype, cin, cout)
             if(len(alist)>= int(rooms)):
-                messages.success(request, "rooms are available")
+                messages.success(request, "Rooms are available")
                 return render(request, "visitor/check_room.html",
                               {'images': roomImages.objects.filter(id=room.id),
                                'img1': room.images, 'facility': fac, 'cap': room.capacity, 'room': room,
@@ -110,15 +107,17 @@ def check_availability(request):
                       {'images': roomImages.objects.filter(id=room.id),
                        'img1': room.images, 'facility': fac, 'cap': room.capacity, 'room': room,'msg':'Rooms are not available'})
 
-
 def book_room(request):
-    ses = request.session['user_session']
     cin = request.POST.get('cin')
     cout = request.POST.get('cout')
     ty = request.POST.get('ty')
     gst = request.POST.get('guest')
     rooms = request.POST.get('rooms')
-    return render(request, "visitor/book_room.html", {'user':user.objects.get(id=ses),'cin': cin, 'cout': cout, 'ty': ty,'gst':gst,'rooms':rooms })
+    ses = request.session['user_session']
+    if ses:
+        return render(request, "visitor/book_room.html", {'user':user.objects.get(id=ses),'cin': cin, 'cout': cout, 'ty': ty,'gst':gst,'rooms':rooms })
+    else:
+        return render(request, "visitor/book_room.html")
 
 def confirm_booking(request):
     ses = request.session['user_session']
